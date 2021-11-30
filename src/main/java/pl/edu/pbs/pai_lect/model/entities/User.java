@@ -1,4 +1,4 @@
-package pl.edu.pbs.pai_lect.model;
+package pl.edu.pbs.pai_lect.model.entities;
 
 import lombok.*;
 

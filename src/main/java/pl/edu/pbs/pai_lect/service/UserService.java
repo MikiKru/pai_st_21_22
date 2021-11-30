@@ -1,7 +1,8 @@
 package pl.edu.pbs.pai_lect.service;
 
 import org.springframework.stereotype.Service;
-import pl.edu.pbs.pai_lect.model.User;
+import pl.edu.pbs.pai_lect.model.dtos.UserDto;
+import pl.edu.pbs.pai_lect.model.entities.User;
 import pl.edu.pbs.pai_lect.repository.UserRepository;
 
 import java.time.LocalDateTime;
@@ -10,9 +11,9 @@ import java.util.Optional;
 
 @Service
 public class UserService {
-    public User registerUser(String email, String password){
-        if(UserRepository.users.stream().allMatch(user -> !user.getEmail().equals(email))) {
-            User user = new User(email, password, LocalDateTime.now(), false);
+    public User registerUser(UserDto userDto){
+        if(UserRepository.users.stream().allMatch(user -> !user.getEmail().equals(userDto.getEmail()))) {
+            User user = new User(userDto.getEmail(), userDto.getPassword(), LocalDateTime.now(), false);
             UserRepository.users.add(user);
             return user;
         }

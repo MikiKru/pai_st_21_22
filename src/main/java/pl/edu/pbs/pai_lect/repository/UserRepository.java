@@ -1,6 +1,6 @@
 package pl.edu.pbs.pai_lect.repository;
 
-import pl.edu.pbs.pai_lect.model.User;
+import pl.edu.pbs.pai_lect.model.entities.User;
 
 import java.time.LocalDateTime;
 import java.util.ArrayList;
