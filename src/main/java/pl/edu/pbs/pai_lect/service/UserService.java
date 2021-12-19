@@ -13,7 +13,7 @@ import java.util.Optional;
 public class UserService {
     public User registerUser(UserDto userDto){
         if(UserRepository.users.stream().allMatch(user -> !user.getEmail().equals(userDto.getEmail()))) {
-            User user = new User(userDto.getEmail(), userDto.getPassword(), LocalDateTime.now(), false);
+            User user = new User();
             UserRepository.users.add(user);
             return user;
         }

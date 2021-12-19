@@ -22,7 +22,7 @@ public class UserController {
     @GetMapping("/users")
     public List<User> getAllUsers(){
         return userService.getAllUsers().stream()
-                .sorted(Comparator.comparing(User::getRegstrationDateTime).reversed())
+                .sorted(Comparator.comparing(User::getRegistrationDateTime).reversed())
                 .collect(Collectors.toList());
     }
     @GetMapping("/users/{user_email}")
