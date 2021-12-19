@@ -1,5 +1,6 @@
 package pl.edu.pbs.pai_lect.model.entities;
 
+import com.fasterxml.jackson.annotation.JsonIgnore;
 import lombok.*;
 
 import javax.persistence.*;
@@ -24,6 +25,7 @@ public class User {
     private String password;
     private LocalDateTime registrationDateTime;
     private boolean status;
+    @JsonIgnore
     @ManyToMany(
             cascade = CascadeType.ALL,
             fetch = FetchType.EAGER)

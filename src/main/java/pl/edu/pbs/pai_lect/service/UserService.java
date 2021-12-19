@@ -3,15 +3,13 @@ package pl.edu.pbs.pai_lect.service;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 import pl.edu.pbs.pai_lect.model.dtos.UserDto;
+import pl.edu.pbs.pai_lect.model.entities.Role;
 import pl.edu.pbs.pai_lect.model.entities.User;
 import pl.edu.pbs.pai_lect.repository.RoleRepository;
 import pl.edu.pbs.pai_lect.repository.UserRepository;
 
 import java.time.LocalDateTime;
-import java.util.Arrays;
-import java.util.HashSet;
-import java.util.List;
-import java.util.Optional;
+import java.util.*;
 
 @Service
 public class UserService {
@@ -28,7 +26,9 @@ public class UserService {
             user.setPassword(userDto.getPassword());
             user.setStatus(true);
             user.setRegistrationDateTime(LocalDateTime.now());
-            user.setRoles(new HashSet<>(Arrays.asList(roleRepository.getById(2))));
+            Set<Role> roles = new HashSet<>();
+            roles.add(roleRepository.getById(2));
+            user.setRoles(roles);
             return userRepository.save(user);   // zapis użytkownika do tabeli user
         }
         return new User();
