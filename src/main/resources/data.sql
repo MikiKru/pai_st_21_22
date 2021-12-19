@@ -1,0 +1,10 @@
+CREATE DATABASE pai_nst_db CHAR SET utf8 COLLATE utf8_polish_ci;
+
+CREATE USER 'pai_nst_user' IDENTIFIED BY 'qwe123';
+
+GRANT
+CREATE, ALTER, REFERENCES, DROP, SELECT, UPDATE, INSERT, DELETE
+ON
+pai_nst_db.*
+TO
+pai_nst_user;
