@@ -1,49 +1,61 @@
 package pl.edu.pbs.pai_lect.service;
 
+import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 import pl.edu.pbs.pai_lect.model.dtos.UserDto;
 import pl.edu.pbs.pai_lect.model.entities.User;
+import pl.edu.pbs.pai_lect.repository.RoleRepository;
 import pl.edu.pbs.pai_lect.repository.UserRepository;
 
 import java.time.LocalDateTime;
+import java.util.Arrays;
+import java.util.HashSet;
 import java.util.List;
 import java.util.Optional;
 
 @Service
 public class UserService {
+    @Autowired
+    private UserRepository userRepository;
+    @Autowired
+    private RoleRepository roleRepository;
+
     public User registerUser(UserDto userDto){
-        if(UserRepository.users.stream().allMatch(user -> !user.getEmail().equals(userDto.getEmail()))) {
+        Optional<User> userOptional = getUserByEmail(userDto.getEmail());
+        if(!userOptional.isPresent()) {
             User user = new User();
-            UserRepository.users.add(user);
-            return user;
+            user.setEmail(userDto.getEmail());
+            user.setPassword(userDto.getPassword());
+            user.setStatus(true);
+            user.setRegistrationDateTime(LocalDateTime.now());
+            user.setRoles(new HashSet<>(Arrays.asList(roleRepository.getById(2))));
+            return userRepository.save(user);   // zapis użytkownika do tabeli user
         }
         return new User();
     }
     public List<User> getAllUsers(){
-        return UserRepository.users;
+        return userRepository.findAll();
     }
     public Optional<User> getUserByEmail(String email){
-        return UserRepository.users.stream()
-                .filter(user -> user.getEmail().equals(email))
-                .findFirst();
+        return userRepository.findFirstByEmail(email);
     }
     public boolean updateUserStatusByEmail(String email){
         Optional<User> userOptional = getUserByEmail(email);
-        if(userOptional.isPresent()){
+        if(userOptional.isPresent()) {
             User user = userOptional.get();
             user.setStatus(!user.isStatus());
+            userRepository.save(user);          // update - gdy wykonywany jest na istniejącym obiekcie w tabeli db
             return true;
         }
         return false;
     }
     public boolean deleteUserByEmail(String email){
-//        Optional<User> userOptional = getUserByEmail(email);
-//        if(userOptional.isPresent()){
-//            User user = userOptional.get();
-//            return UserRepository.users.remove(user);
-//        }
-//        return false;
-        return UserRepository.users.remove(getUserByEmail(email).orElse(new User()));
+        Optional<User> userOptional = getUserByEmail(email);
+        if(userOptional.isPresent()) {
+            userRepository.delete(userOptional.get());
+            return true;
+        }
+        return false;
     }
 
 }
